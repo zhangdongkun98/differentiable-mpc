@@ -12,9 +12,9 @@ from mpc import mpc
 from mpc.mpc import GradMethods, QuadCost, LinDx
 
 import sys
-from IPython.core import ultratb
-sys.excepthook = ultratb.FormattedTB(mode='Verbose',
-     color_scheme='Linux', call_pdb=1)
+# from IPython.core import ultratb
+# sys.excepthook = ultratb.FormattedTB(mode='Verbose',
+#      color_scheme='Linux', call_pdb=1)
 
 import time
 import os
@@ -89,12 +89,14 @@ def main():
     loss_f.flush()
 
     def get_loss(x_init, _A, _B):
+        lqr_iter = 10
+
         F = torch.cat((expert['A'], expert['B']), dim=1) \
             .unsqueeze(0).unsqueeze(0).repeat(args.T, n_batch, 1, 1)
         x_true, u_true, objs_true = mpc.MPC(
             n_state, n_ctrl, args.T,
             u_lower=u_lower, u_upper=u_upper, u_init=u_init,
-            lqr_iter=100,
+            lqr_iter=lqr_iter,
             verbose=-1,
             exit_unconverged=False,
             detach_unconverged=False,
@@ -106,7 +108,7 @@ def main():
         x_pred, u_pred, objs_pred = mpc.MPC(
             n_state, n_ctrl, args.T,
             u_lower=u_lower, u_upper=u_upper, u_init=u_init,
-            lqr_iter=100,
+            lqr_iter=lqr_iter,
             verbose=-1,
             exit_unconverged=False,
             detach_unconverged=False,
