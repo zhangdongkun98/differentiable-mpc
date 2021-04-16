@@ -89,7 +89,7 @@ def main():
     loss_f.flush()
 
     def get_loss(x_init, _A, _B):
-        lqr_iter = 10
+        lqr_iter = 2
 
         F = torch.cat((expert['A'], expert['B']), dim=1) \
             .unsqueeze(0).unsqueeze(0).repeat(args.T, n_batch, 1, 1)
